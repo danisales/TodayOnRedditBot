@@ -81,6 +81,8 @@ def main():
 	dp.add_handler(CommandHandler("get_top_posts", get_top_posts, pass_args=True))
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
 
+	dp.add_error_handler(error)
+	
 	updater.start_polling()
 	updater.idle()
 
