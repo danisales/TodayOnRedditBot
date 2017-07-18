@@ -73,12 +73,15 @@ def add_subreddit(bot, update, args):
 		chat_id = {'id': update.message.chat.id}
 		subreddits = users.find(chat_id)[0]['subreddits']
 		subreddit = args[0]
-		if (subreddit.lower()) not in ([e.lower() for e in subreddits]):
-			subreddits.append(subreddit)
-			users.update(chat_id, {'$set': {'subreddits': subreddits}})
-			update.message.reply_text(subreddit + ' added!')
+		if valid_subreddit(subreddit):
+			if (subreddit.lower()) not in ([e.lower() for e in subreddits]):
+				subreddits.append(subreddit)
+				users.update(chat_id, {'$set': {'subreddits': subreddits}})
+				update.message.reply_text(subreddit + ' added!')
+			else:
+				update.message.reply_text(subreddit + ' was already in your subreddit list!')
 		else:
-			update.message.reply_text(subreddit + ' was already in your subreddit list!')
+			update.message.reply_text(subreddit + ' does not exist!')
 	else:
 		update.message.reply_text(error_msg('/add_subreddit <subreddit>'))
 
@@ -143,6 +146,13 @@ def check_notification(bot, update):
 			update.message.reply_text('Notification off.\nIf you want to change it use /set_notification.')
 	except:
 		update.message.reply_text('Ops, something went wrong :(')
+
+def valid_subreddit(subreddit):
+	try:
+		reddit.subreddits.search_by_name(subreddit, exact=True)
+		return True
+	except:
+		return False
 
 def post_msg(submission):
 	msg = submission.title + '\n'
