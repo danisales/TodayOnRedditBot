@@ -20,7 +20,7 @@ users.create_index('id', unique=True)
 
 def start(bot, update):
 	try:
-		data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
+		data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0, 'notification': False}
 		users.insert_one(data)
 		update.message.reply_text('Starting bot...')
 	except:
