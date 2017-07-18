@@ -68,6 +68,18 @@ def get_popular_posts(bot, update, args):
 	except:
 		update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
 
+def set_nb_posts(bot, update, args):
+	if(len(args) == 1):
+		try:
+			nb_posts = int(args[0])
+			chat_id = {'id': update.message.chat.id}
+			users.update(chat_id, {'$set': {'nb_posts': nb_posts}})
+			update.message.reply_text('Number of posts set to' + args[0])	
+		except:
+			update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))	
+	else:
+		update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))
+
 def post_msg(submission):
 	msg = submission.title + '\n'
 	msg += submission.url + '\n'
@@ -93,6 +105,7 @@ def main():
 	dp.add_handler(CommandHandler("help", help))
 	dp.add_handler(CommandHandler("get_top_posts", get_top_posts, pass_args=True))
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
+	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
 	dp.add_error_handler(error)
 
 	updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
