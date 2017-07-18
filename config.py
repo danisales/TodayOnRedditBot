@@ -1,7 +1,9 @@
+import os
+
 # Reddit API
-id = 'CLIENT_ID'
-secret = 'CLIENT_SECRET'
-user_agent = 'USER_AGENT'
+id = os.environ['CLIENT_ID']
+secret = os.environ['CLIENT_SECRET']
+user_agent = os.environ['USER_AGENT']
 
 # Telegram Bot
-token = 'BOT_TOKEN'
+token = os.environ['BOT_TOKEN']

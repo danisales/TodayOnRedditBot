@@ -2,16 +2,13 @@ import praw
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
-config = {}
-execfile("config.py", config)
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-reddit = praw.Reddit(client_id=config['id'],
-                     client_secret=config['secret'],
-                     user_agent=config['user_agent'])
+reddit = praw.Reddit(client_id=config.id,
+                     client_secret=config.secret,
+                     user_agent=config.user_agent)
 
 def start(bot, update):
 	update.message.reply_text('Starting bot...')
@@ -73,7 +70,7 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
-	updater = Updater(config['token'])
+	updater = Updater(config.token)
 	dp = updater.dispatcher
 
 	dp.add_handler(CommandHandler("start", start))
