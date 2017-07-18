@@ -19,9 +19,12 @@ users = db['users']
 users.create_index('id', unique=True)
 
 def start(bot, update):
-	data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
-	users.insert_one(data)
-	update.message.reply_text('Starting bot...')
+	try:
+		data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
+		users.insert_one(data)
+		update.message.reply_text('Starting bot...')
+	except:
+		update.message.reply_text('Starting bot...')
 
 def help(bot, update):
 	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s top subreddit posts\n\n'
