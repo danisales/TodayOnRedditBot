@@ -78,9 +78,23 @@ def add_subreddit(bot, update, args):
 			users.update(chat_id, {'$set': {'subreddits': subreddits}})
 			update.message.reply_text(subreddit + ' added!')
 		else:
-			update.message.reply_text(subreddit + ' was already added!')
+			update.message.reply_text(subreddit + ' was already in your subreddit list!')
 	else:
 		update.message.reply_text(error_msg('/add_subreddit <subreddit>'))
+
+def remove_subreddit(bot, update, args):
+	if(len(args) == 1):
+		chat_id = {'id': update.message.chat.id}
+		subreddits = users.find(chat_id)[0]['subreddits']
+		subreddit = args[0]
+		if (subreddit.lower()) in ([e.lower() for e in subreddits]):
+			subreddits.remove(subreddit)
+			users.update(chat_id, {'$set': {'subreddits': subreddits}})
+			update.message.reply_text(subreddit + ' added!')
+		else:
+			update.message.reply_text(subreddit + ' was not in you subreddit list!')
+	else:
+		update.message.reply_text(error_msg('/remove_subreddit <subreddit>'))
 
 def set_nb_posts(bot, update, args):
 	if(len(args) == 1):
@@ -144,6 +158,7 @@ def main():
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
 	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
 	dp.add_handler(CommandHandler("add_subreddit", add_subreddit, pass_args=True))
+	dp.add_handler(CommandHandler("remove_subreddit", remove_subreddit, pass_args=True))
 	dp.add_handler(CommandHandler("set_notification", set_notification))
 	dp.add_handler(CommandHandler("check_notification", check_notification))
 	dp.add_error_handler(error)
