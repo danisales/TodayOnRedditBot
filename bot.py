@@ -73,7 +73,7 @@ def add_subreddit(bot, update, args):
 		chat_id = {'id': update.message.chat.id}
 		subreddits = users.find(chat_id)[0]['subreddits']
 		subreddit = args[0]
-		if (subreddit.lower()) not in ([e.lower() for e in list]):
+		if (subreddit.lower()) not in ([e.lower() for e in subreddits]):
 			subreddits.append(subreddit)
 			users.update(chat_id, {'$set': {'subreddits': subreddits}})
 			update.message.reply_text(subreddit + ' added!')
