@@ -7,3 +7,6 @@ user_agent = os.environ['USER_AGENT']
 
 # Telegram Bot
 token = os.environ['BOT_TOKEN']
+
+# MongoDB
+uri = os.eviron['MONGODB_URI']

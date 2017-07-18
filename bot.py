@@ -3,6 +3,7 @@ import praw
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import os
+import pymongo
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -11,12 +12,18 @@ logger = logging.getLogger(__name__)
 reddit = praw.Reddit(client_id=config.id,
                      client_secret=config.secret,
                      user_agent=config.user_agent)
+client = pymongo.MongoClient(config.uri)
+db = client.todayonredditbot
+
+users = db['users']
 
 def start(bot, update):
+	query = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
+	users.insert_one(query)
 	update.message.reply_text('Starting bot...')
 
 def help(bot, update):
-	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s topsubreddit posts\n\n'
+	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s top subreddit posts\n\n'
 	msg +='/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): return popular posts from chosen subreddit\n\n'
 	msg +='Default subreddit: /r/all\nDefault number of posts: 5'
 	update.message.reply_text(msg)
