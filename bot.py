@@ -2,6 +2,7 @@ import config
 import praw
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
+import os
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -15,7 +16,7 @@ def start(bot, update):
 	update.message.reply_text('Starting bot...')
 
 def help(bot, update):
-	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s top subreddit posts\n\n'
+	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s topsubreddit posts\n\n'
 	msg +='/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): return popular posts from chosen subreddit\n\n'
 	msg +='Default subreddit: /r/all\nDefault number of posts: 5'
 	update.message.reply_text(msg)
@@ -71,17 +72,20 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
-	updater = Updater(config.token)
+	TOKEN = config.token
+	PORT = int(os.environ.get('PORT', '5000'))
+
+	updater = Updater(TOKEN)
 	dp = updater.dispatcher
 
 	dp.add_handler(CommandHandler("start", start))
 	dp.add_handler(CommandHandler("help", help))
 	dp.add_handler(CommandHandler("get_top_posts", get_top_posts, pass_args=True))
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
-
 	dp.add_error_handler(error)
 
-	updater.start_polling()
+	updater.start_webhook(listen="0.0.0.0", port=PORT, token=TOKEN, url_path=TOKEN)
+	updater.bot.set_webhook("https://todayonredditbot.herokuapp.com/" + TOKEN)
 	updater.idle()
 
 if __name__ == '__main__':
