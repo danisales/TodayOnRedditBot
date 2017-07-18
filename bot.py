@@ -96,6 +96,17 @@ def remove_subreddit(bot, update, args):
 	else:
 		update.message.reply_text(error_msg('/remove_subreddit <subreddit>'))
 
+def check_subreddits(bot, update):
+	chat_id = {'id': update.message.chat.id}
+	subreddits = users.find(chat_id)[0]['subreddits']
+	if(len(subreddits) == 0):
+		update.message.reply_text('Your list is empty.\nAdd subreddits using /add_subreddit <subreddit>')
+	else:
+		for subreddit in subreddits:
+			print subreddit
+			print reddit.subreddit(subreddit).public_description
+			print '\n'
+
 def set_nb_posts(bot, update, args):
 	if(len(args) == 1):
 		try:
@@ -159,6 +170,7 @@ def main():
 	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
 	dp.add_handler(CommandHandler("add_subreddit", add_subreddit, pass_args=True))
 	dp.add_handler(CommandHandler("remove_subreddit", remove_subreddit, pass_args=True))
+	dp.add_handler(CommandHandler("check_subreddits", check_subreddits))
 	dp.add_handler(CommandHandler("set_notification", set_notification))
 	dp.add_handler(CommandHandler("check_notification", check_notification))
 	dp.add_error_handler(error)
