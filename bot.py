@@ -90,7 +90,7 @@ def remove_subreddit(bot, update, args):
 		if (subreddit.lower()) in ([e.lower() for e in subreddits]):
 			subreddits.remove(subreddit)
 			users.update(chat_id, {'$set': {'subreddits': subreddits}})
-			update.message.reply_text(subreddit + ' added!')
+			update.message.reply_text(subreddit + ' removed!')
 		else:
 			update.message.reply_text(subreddit + ' was not in you subreddit list!')
 	else:
