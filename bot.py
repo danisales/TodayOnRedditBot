@@ -102,10 +102,12 @@ def check_subreddits(bot, update):
 	if(len(subreddits) == 0):
 		update.message.reply_text('Your list is empty.\nAdd subreddits using /add_subreddit <subreddit>')
 	else:
+		msg = ''
 		for subreddit in subreddits:
-			print subreddit
-			print reddit.subreddit(subreddit).public_description
-			print '\n'
+			msg += subreddit + '\n'
+			msg += reddit.subreddit(subreddit).public_description + '\n\n'
+		update.message.reply_text(msg)
+			
 
 def set_nb_posts(bot, update, args):
 	if(len(args) == 1):
