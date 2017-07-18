@@ -71,11 +71,12 @@ def get_popular_posts(bot, update, args):
 def add_subreddit(bot, update, args):
 	if(len(args) == 1):
 		chat_id = {'id': update.message.chat.id}
-		subreddits = users.find(id)[0]['subreddits']
+		subreddits = users.find(chat_id)[0]['subreddits']
 		subreddit = args[0]
-		if(subreddit not in subreddits):
+		if (subreddit.lower()) not in ([e.lower() for e in list]):
 			subreddits.append(subreddit)
 			users.update(chat_id, {'$set': {'subreddits': subreddits}})
+			update.message.reply_text(subreddit + ' added!')
 		else:
 			update.message.reply_text(subreddit + ' was already added!')
 	else:
