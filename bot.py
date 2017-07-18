@@ -68,13 +68,26 @@ def get_popular_posts(bot, update, args):
 	except:
 		update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
 
+def add_subreddit(bot, update, args):
+	if(len(args) == 1):
+		chat_id = {'id': update.message.chat.id}
+		subreddits = users.find(id)[0]['subreddits']
+		subreddit = args[0]
+		if(subreddit not in subreddits):
+			subreddits.append(subreddit)
+			users.update(chat_id, {'$set': {'subreddits': subreddits}})
+		else:
+			update.message.reply_text(subreddit + ' was already added!')
+	else:
+		update.message.reply_text(error_msg('/add_subreddit <subreddit>'))
+
 def set_nb_posts(bot, update, args):
 	if(len(args) == 1):
 		try:
 			nb_posts = int(args[0])
 			chat_id = {'id': update.message.chat.id}
 			users.update(chat_id, {'$set': {'nb_posts': nb_posts}})
-			update.message.reply_text('Number of posts set to' + args[0])	
+			update.message.reply_text('Number of posts set to ' + args[0])	
 		except:
 			update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))	
 	else:
@@ -106,6 +119,7 @@ def main():
 	dp.add_handler(CommandHandler("get_top_posts", get_top_posts, pass_args=True))
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
 	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
+	dp.add_handler(CommandHandler("add_subreddit", add_subreddit, pass_args=True))
 	dp.add_error_handler(error)
 
 	updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
