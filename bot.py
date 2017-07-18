@@ -95,14 +95,25 @@ def set_nb_posts(bot, update, args):
 		update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))
 
 def set_notification(bot, update):
-	chat_id = {'id': update.message.chat.id}
-	notification = not (users.find(chat_id)[0]['notification'])
 	try:
+		chat_id = {'id': update.message.chat.id}
+		notification = not (users.find(chat_id)[0]['notification'])
 		users.update(chat_id, {'$set': {'notification': notification}})
 		if(notification):
 			update.message.reply_text('Notification on')
 		else:
 			update.message.reply_text('Notification off')
+	except:
+		update.message.reply_text('Ops, something went wrong :(')
+
+def check_notification(bot, update):
+	try:
+		chat_id = {'id': update.message.chat.id}
+		notification = users.find(chat_id)[0]['notification']
+		if(notification):
+			update.message.reply_text('Notification on.\nIf you want to change it use /set_notification.')
+		else:
+			update.message.reply_text('Notification off.\nIf you want to change it use /set_notification.')
 	except:
 		update.message.reply_text('Ops, something went wrong :(')
 
@@ -134,6 +145,7 @@ def main():
 	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
 	dp.add_handler(CommandHandler("add_subreddit", add_subreddit, pass_args=True))
 	dp.add_handler(CommandHandler("set_notification", set_notification))
+	dp.add_handler(CommandHandler("check_notification", check_notification))
 	dp.add_error_handler(error)
 
 	updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
