@@ -9,9 +9,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-reddit = praw.Reddit(client_id=config['CLIENT_ID'],
-                     client_secret=config['CLIENT_SECRET'],
-                     user_agent=config['USER_AGENT'])
+reddit = praw.Reddit(client_id=config['id'],
+                     client_secret=config['secret'],
+                     user_agent=config['user_agent'])
 
 def start(bot, update):
 	update.message.reply_text('Starting bot...')
@@ -73,7 +73,7 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
-	updater = Updater(config['TOKEN'])
+	updater = Updater(config['token'])
 	dp = updater.dispatcher
 
 	dp.add_handler(CommandHandler("start", start))
@@ -82,7 +82,7 @@ def main():
 	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
 
 	dp.add_error_handler(error)
-	
+
 	updater.start_polling()
 	updater.idle()
 

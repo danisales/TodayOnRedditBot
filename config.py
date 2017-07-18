@@ -1,7 +1,7 @@
 # Reddit API
-CLIENT_ID = ''
-CLIENT_SECRET = ''
-USER_AGENT = ''
+id = 'CLIENT_ID'
+secret = 'CLIENT_SECRET'
+user_agent = 'USER_AGENT'
 
 # Telegram Bot
-TOKEN = ''
+token = 'BOT_TOKEN'
