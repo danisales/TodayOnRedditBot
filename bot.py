@@ -16,10 +16,11 @@ client = pymongo.MongoClient(config.uri)
 db = client.todayonredditbot
 
 users = db['users']
+user.create_index('id', unique=True)
 
 def start(bot, update):
-	query = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
-	users.insert_one(query)
+	data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
+	users.insert_one(data)
 	update.message.reply_text('Starting bot...')
 
 def help(bot, update):
