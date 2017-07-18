@@ -85,7 +85,7 @@ def main():
 	dp.add_error_handler(error)
 
 	updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-	updater.bot.set_webhook("https://todayonredditbotwe.herokuapp.com/" + TOKEN)
+	updater.bot.set_webhook("https://todayonredditbot.herokuapp.com/" + TOKEN)
 	updater.idle()
 
 if __name__ == '__main__':
