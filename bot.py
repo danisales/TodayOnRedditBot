@@ -16,7 +16,7 @@ client = pymongo.MongoClient(config.uri)
 db = client.todayonredditbot
 
 users = db['users']
-user.create_index('id', unique=True)
+users.create_index('id', unique=True)
 
 def start(bot, update):
 	data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0}
