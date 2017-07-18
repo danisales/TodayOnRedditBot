@@ -32,20 +32,13 @@ def get_top_posts(bot, update, args):
 		try:
 			limit = int(args[1])
 		except:
-			error = 'Ops, something went wrong :(\n'
-			error += 'Usage: /get_top_posts <subreddit> <number of posts>'
-			update.message.reply_text(error)
+			update.message.reply_text(error_msg('/get_top_posts <subreddit> <number of posts>'))
 	
 	try:
 		for submission in reddit.subreddit(subreddit).top('day', limit=limit):
-			msg = submission.title + '\n'
-			msg += submission.url + '\n'
-			msg += submission.shortlink
-			update.message.reply_text(msg)
+			update.message.reply_text(post_msg(submission))
 	except:
-		error = 'Ops, something went wrong :(\n'
-		error += 'Usage: /get_top_posts <subreddit> <number of posts>'
-		update.message.reply_text(error)
+		update.message.reply_text(error_msg('/get_top_posts <subreddit> <number of posts>'))
 
 def get_popular_posts(bot, update, args):
 	subreddit = 'all'
@@ -57,20 +50,24 @@ def get_popular_posts(bot, update, args):
 		try:
 			limit = int(args[1])
 		except:
-			error = 'Ops, something went wrong :(\n'
-			error += 'Usage: /get_popular_posts <subreddit> <number of posts>'
-			update.message.reply_text(error)
+			update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
 
 	try:
 		for submission in reddit.subreddit(subreddit).hot(limit=limit):
-			msg = submission.title + '\n'
-			msg += submission.url + '\n'
-			msg += submission.shortlink
-			update.message.reply_text(msg)
+			update.message.reply_text(post_msg(submission))
 	except:
-		error = 'Ops, something went wrong :(\n'
-		error += 'Usage: /get_popular_posts <subreddit> <number of posts>'
-		update.message.reply_text(error)
+		update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
+
+def post_msg(submission):
+	msg = submission.title + '\n'
+	msg += submission.url + '\n'
+	msg += submission.shortlink
+	return msg
+
+def error_msg(usage):
+	error = 'Ops, something went wrong :(\n'
+	error += 'Usage: ' + usage
+	return error
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
