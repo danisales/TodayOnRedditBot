@@ -9,4 +9,4 @@ user_agent = os.environ['USER_AGENT']
 token = os.environ['BOT_TOKEN']
 
 # MongoDB
-uri = os.eviron['MONGODB_URI']
+uri = os.environ['MONGODB_URI']
