@@ -1,3 +1,4 @@
+import config
 import praw
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
