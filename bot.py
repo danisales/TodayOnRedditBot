@@ -107,8 +107,9 @@ def check_subreddits(bot, update):
 	else:
 		msg = ''
 		for subreddit in subreddits:
-			msg += subreddit + '\n'
-			msg += reddit.subreddit(subreddit).public_description + '\n\n'
+			if valid_subreddit(subreddit):
+				msg += subreddit + '\n'
+				msg += reddit.subreddit(subreddit).public_description + '\n\n'
 		update.message.reply_text(msg)
 			
 
