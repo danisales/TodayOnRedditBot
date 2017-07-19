@@ -3,6 +3,7 @@ from telegram.ext import Updater
 from telegram.bot import Bot
 import pymongo
 import praw
+import config
 
 sched = BlockingScheduler()
 reddit = praw.Reddit(client_id=config.id,
@@ -15,7 +16,6 @@ users = db['users']
 users.create_index('id', unique=True)
 
 bot = Bot(config.token)
-updater = Updater(config.token)
 
 @sched.scheduled_job('cron', day_of_week='mon-sun', hour=17)
 def scheduled_job():
@@ -27,4 +27,4 @@ def scheduled_job():
 				msg += submission.shortlink
 				bot.send_message(user['id'], text=msg)
 
-shed.start()
+sched.start()
