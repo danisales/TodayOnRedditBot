@@ -22,14 +22,24 @@ def start(bot, update):
 	try:
 		data = {'id': update.message.chat.id, 'subreddits': [], 'nb_posts': 0, 'notification': False}
 		users.insert_one(data)
-		update.message.reply_text('Starting bot...')
+		update.message.reply_text('Welcome, send /help to know what you can do :)')
 	except:
-		update.message.reply_text('Starting bot...')
+		update.message.reply_text('Welcome, send /help to know what you can do :)')
 
 def help(bot, update):
-	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): return today\'s top subreddit posts\n\n'
-	msg +='/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): return popular posts from chosen subreddit\n\n'
-	msg +='Default subreddit: /r/all\nDefault number of posts: 5'
+	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): '
+	msg += 'returns today\'s top subreddit posts\n\n'
+	msg += '/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): '
+	msg += 'returns popular posts from chosen subreddit\n\n'
+	msg += 'Default subreddit: /r/all\nDefault number of posts: 5\n\n'
+	msg += 'You can also receive daily messages with the top posts of your favorite subreddits\n\n'
+	msg += 'Use /set_notification to turn daily notifications on or off and /check_notification to '
+	msg += 'know if notifications are on or off\n\n'
+	msg += 'You can use /add_subreddit <subreddit> and /remove_subreddit <subreddit> '
+	msg += 'to choose the subreddits you want to receive\n\n'
+	msg += 'To set the number of posts you want to receive for each subreddit use /set_nb_posts\n\n'
+	msg += 'IMPORTANT: by default, notifications are off and number of posts is 0\n'
+	msg += 'Daily messages are always sent at 7pm (UTC -3)'
 	update.message.reply_text(msg)
 
 def get_top_posts(bot, update, args):
