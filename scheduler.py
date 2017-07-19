@@ -6,6 +6,7 @@ import praw
 import config
 
 sched = BlockingScheduler()
+
 reddit = praw.Reddit(client_id=config.id,
                      client_secret=config.secret,
                      user_agent=config.user_agent)
@@ -13,11 +14,10 @@ reddit = praw.Reddit(client_id=config.id,
 client = pymongo.MongoClient(config.uri)
 db = client.todayonredditbot
 users = db['users']
-users.create_index('id', unique=True)
 
 bot = Bot(config.token)
 
-@sched.scheduled_job('cron', day_of_week='mon-sun', hour=17)
+@sched.scheduled_job('cron', day_of_week='mon-sun', hour=18, timezone='America/Bahia')
 def scheduled_job():
 	for user in users.find({'notification': True}):
 		for subreddit in user['subreddits']:
