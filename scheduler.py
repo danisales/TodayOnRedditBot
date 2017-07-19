@@ -21,7 +21,7 @@ bot = Bot(config.token)
 def scheduled_job():
 	for user in users.find({'notification': True}):
 		subreddits = user['subreddits']
-		if(len(subreddits) > 0):
+		if(len(subreddits) > 0 and user['nb_posts'] > 0):
 			for subreddit in subreddits:
 				bot.send_message(user['id'], text='Today on ' + subreddit)
 				for submission in reddit.subreddit(subreddit).hot(limit=user['nb_posts']):
