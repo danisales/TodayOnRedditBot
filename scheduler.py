@@ -20,11 +20,13 @@ bot = Bot(config.token)
 @sched.scheduled_job('cron', day_of_week='mon-sun', hour=18, timezone='America/Bahia')
 def scheduled_job():
 	for user in users.find({'notification': True}):
-		for subreddit in user['subreddits']:
-			for submission in reddit.subreddit(subreddit).hot(limit=user['nb_posts']):
-				msg = submission.title + '\n'
-				msg += submission.url + '\n'
-				msg += submission.shortlink
-				bot.send_message(user['id'], text=msg)
+		subreddits = user['subreddits']
+		if(len(subreddits) > 0):
+			for subreddit in subreddits:
+				for submission in reddit.subreddit(subreddit).hot(limit=user['nb_posts']):
+					msg = submission.title + '\n'
+					msg += submission.url + '\n'
+					msg += submission.shortlink
+					bot.send_message(user['id'], text=msg)
 
 sched.start()
