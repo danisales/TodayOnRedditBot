@@ -28,9 +28,9 @@ def start(bot, update):
 
 def help(bot, update):
 	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): '
-	msg += 'returns today\'s top subreddit posts\n\n'
+	msg += 'return today\'s top subreddit posts\n\n'
 	msg += '/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): '
-	msg += 'returns popular posts from chosen subreddit\n\n'
+	msg += 'return popular posts from chosen subreddit\n\n'
 	msg += 'Default subreddit: /r/all\nDefault number of posts: 5\n\n'
 	msg += 'You can also receive daily messages with the top posts of your favorite subreddits\n\n'
 	msg += 'Use /set_notification to turn daily notifications on or off and /check_notification to '
@@ -91,7 +91,10 @@ def add_subreddit(bot, update, args):
 			else:
 				update.message.reply_text(subreddit + ' was already in your subreddit list!')
 		else:
-			update.message.reply_text(subreddit + ' does not exist!\nDid you mean one of these?\n\n' + suggestions(subreddit))
+			msg = subreddit + ' does not exist!'
+			if(len(suggestions(subreddit)) > 0):
+				msg += '\nDid you mean one of these?\n\n' + suggestions(subreddit)
+			update.message.reply_text(msg)
 	else:
 		update.message.reply_text(error_msg('/add_subreddit <subreddit>'))
 
@@ -167,9 +170,9 @@ def check_notification(bot, update):
 		chat_id = {'id': update.message.chat.id}
 		notification = users.find(chat_id)[0]['notification']
 		if(notification):
-			update.message.reply_text('Notification on.\nIf you want to change it use /set_notification.')
+			update.message.reply_text('Notification on.\nIf you want to change it, use /set_notification.')
 		else:
-			update.message.reply_text('Notification off.\nIf you want to change it use /set_notification.')
+			update.message.reply_text('Notification off.\nIf you want to change it, use /set_notification.')
 	except:
 		update.message.reply_text('Ops, something went wrong :(')
 
