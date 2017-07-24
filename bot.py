@@ -27,18 +27,18 @@ def start(bot, update):
 		update.message.reply_text('Welcome, send /help to know what you can do :)')
 
 def help(bot, update):
-	msg = '/get_top_posts <subreddit> <number of posts> (e.g. /get_top_posts AskReddit 3): '
+	msg = '/gettopposts <subreddit> <number of posts> (e.g. /gettopposts AskReddit 3): '
 	msg += 'return today\'s top subreddit posts\n\n'
-	msg += '/get_popular_posts <subreddit> <number of posts> (e.g. /get_popular_posts AskReddit 3): '
+	msg += '/getpopularposts <subreddit> <number of posts> (e.g. /getpopularposts AskReddit 3): '
 	msg += 'return popular posts from chosen subreddit\n\n'
 	msg += 'Default subreddit: /r/all\nDefault number of posts: 5\n\n'
 	msg += 'You can also receive daily messages with the top posts of your favorite subreddits\n\n'
-	msg += 'Use /set_notification to turn daily notifications on or off and /check_notification to '
+	msg += 'Use /setnotification to turn daily notifications on or off and /checknotification to '
 	msg += 'know if notifications are on or off\n\n'
-	msg += 'You can use /add_subreddit <subreddit> and /remove_subreddit <subreddit> '
+	msg += 'You can use /addsubreddit <subreddit> and /removesubreddit <subreddit> '
 	msg += 'to choose the subreddits you want to receive. If you want to see your subreddit list '
-	msg += 'use /check_subreddits.\n\n'
-	msg += 'To set the number of posts you want to receive for each subreddit use /set_nb_posts\n\n'
+	msg += 'use /checksubreddits.\n\n'
+	msg += 'To change the number of posts you want to receive for each subreddit use /setnbposts\n\n'
 	msg += 'IMPORTANT: by default, notifications are off and number of posts is 0\n'
 	msg += 'Daily messages are always sent at 7pm (UTC -3)'
 	update.message.reply_text(msg)
@@ -53,13 +53,13 @@ def get_top_posts(bot, update, args):
 		try:
 			limit = int(args[1])
 		except:
-			update.message.reply_text(error_msg('/get_top_posts <subreddit> <number of posts>'))
+			update.message.reply_text(error_msg('/gettopposts <subreddit> <number of posts>'))
 	
 	try:
 		for submission in reddit.subreddit(subreddit).top('day', limit=limit):
 			update.message.reply_text(post_msg(submission))
 	except:
-		update.message.reply_text(error_msg('/get_top_posts <subreddit> <number of posts>'))
+		update.message.reply_text(error_msg('/gettopposts <subreddit> <number of posts>'))
 
 def get_popular_posts(bot, update, args):
 	subreddit = 'all'
@@ -71,13 +71,13 @@ def get_popular_posts(bot, update, args):
 		try:
 			limit = int(args[1])
 		except:
-			update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
+			update.message.reply_text(error_msg('/getpopularposts <subreddit> <number of posts>'))
 
 	try:
 		for submission in reddit.subreddit(subreddit).hot(limit=limit):
 			update.message.reply_text(post_msg(submission))
 	except:
-		update.message.reply_text(error_msg('/get_popular_posts <subreddit> <number of posts>'))
+		update.message.reply_text(error_msg('/getpopularposts <subreddit> <number of posts>'))
 
 def add_subreddit(bot, update, args):
 	if(len(args) == 1):
@@ -97,7 +97,7 @@ def add_subreddit(bot, update, args):
 				msg += '\nDid you mean one of these?\n\n' + suggestions(subreddit)
 			update.message.reply_text(msg)
 	else:
-		update.message.reply_text(error_msg('/add_subreddit <subreddit>'))
+		update.message.reply_text(error_msg('/addsubreddit <subreddit>'))
 
 def remove_subreddit(bot, update, args):
 	if(len(args) == 1):
@@ -111,13 +111,13 @@ def remove_subreddit(bot, update, args):
 		else:
 			update.message.reply_text(subreddit + ' was not in you subreddit list!')
 	else:
-		update.message.reply_text(error_msg('/remove_subreddit <subreddit>'))
+		update.message.reply_text(error_msg('/removesubreddit <subreddit>'))
 
 def check_subreddits(bot, update):
 	chat_id = {'id': update.message.chat.id}
 	subreddits = users.find(chat_id)[0]['subreddits']
 	if(len(subreddits) == 0):
-		update.message.reply_text('Your list is empty.\nAdd subreddits using /add_subreddit <subreddit>')
+		update.message.reply_text('Your list is empty.\nAdd subreddits using /addsubreddit <subreddit>')
 	else:
 		msg = ''
 		for subreddit in subreddits:
@@ -150,9 +150,9 @@ def set_nb_posts(bot, update, args):
 			users.update(chat_id, {'$set': {'nb_posts': nb_posts}})
 			update.message.reply_text('Number of posts set to ' + args[0])	
 		except:
-			update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))	
+			update.message.reply_text(error_msg('/setnbposts <number of posts>'))	
 	else:
-		update.message.reply_text(error_msg('/set_nb_posts <number of posts>'))
+		update.message.reply_text(error_msg('/setnbposts <number of posts>'))
 
 def set_notification(bot, update):
 	try:
@@ -171,9 +171,9 @@ def check_notification(bot, update):
 		chat_id = {'id': update.message.chat.id}
 		notification = users.find(chat_id)[0]['notification']
 		if(notification):
-			update.message.reply_text('Notification on.\nIf you want to change it, use /set_notification.')
+			update.message.reply_text('Notification on.\nIf you want to change it, use /setnotification.')
 		else:
-			update.message.reply_text('Notification off.\nIf you want to change it, use /set_notification.')
+			update.message.reply_text('Notification off.\nIf you want to change it, use /setnotification.')
 	except:
 		update.message.reply_text('Ops, something went wrong :(')
 
@@ -200,14 +200,14 @@ def main():
 
 	dp.add_handler(CommandHandler("start", start))
 	dp.add_handler(CommandHandler("help", help))
-	dp.add_handler(CommandHandler("get_top_posts", get_top_posts, pass_args=True))
-	dp.add_handler(CommandHandler("get_popular_posts", get_popular_posts, pass_args=True))
-	dp.add_handler(CommandHandler("set_nb_posts", set_nb_posts, pass_args=True))
-	dp.add_handler(CommandHandler("add_subreddit", add_subreddit, pass_args=True))
-	dp.add_handler(CommandHandler("remove_subreddit", remove_subreddit, pass_args=True))
-	dp.add_handler(CommandHandler("check_subreddits", check_subreddits))
-	dp.add_handler(CommandHandler("set_notification", set_notification))
-	dp.add_handler(CommandHandler("check_notification", check_notification))
+	dp.add_handler(CommandHandler("gettopposts", get_top_posts, pass_args=True))
+	dp.add_handler(CommandHandler("getpopularposts", get_popular_posts, pass_args=True))
+	dp.add_handler(CommandHandler("setnbposts", set_nb_posts, pass_args=True))
+	dp.add_handler(CommandHandler("addsubreddit", add_subreddit, pass_args=True))
+	dp.add_handler(CommandHandler("removesubreddit", remove_subreddit, pass_args=True))
+	dp.add_handler(CommandHandler("checksubreddits", check_subreddits))
+	dp.add_handler(CommandHandler("setnotification", set_notification))
+	dp.add_handler(CommandHandler("checknotification", check_notification))
 	dp.add_error_handler(error)
 
 	updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
