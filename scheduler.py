@@ -30,7 +30,7 @@ def scheduled_job():
 					msg += submission.shortlink
 					bot.send_message(user['id'], text=msg)
 			msg = 'You are receiving this messages because you turned notification on. '
-			msg += 'If you no longer want to receive this, just send /set_notification.'
+			msg += 'If you no longer want to receive this, just send /setnotification.'
 			bot.send_message(user['id'], msg)
 
 sched.start()
